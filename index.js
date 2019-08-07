@@ -376,7 +376,7 @@ function init() {
         row.onclick = (e) => {
             if (curActiveRow) curActiveRow.style.background = 'none';
             curActiveRow = e.currentTarget;
-            curActiveRow.style.background = 'grey';
+            curActiveRow.style.background = 'LightSkyBlue';
             const curGeo = this.yMap.geoObjects.get(i);
             this.yMap.panTo(curGeo.geometry.getCoordinates());
             curGeo.balloon.open();
@@ -420,7 +420,9 @@ function init() {
         curPM.events.add('click', () => {
             if (curActiveRow) curActiveRow.style.background = 'none';
             curActiveRow = tableRows[i];
-            curActiveRow.style.background = 'grey';
+            curActiveRow.style.background = 'LightSkyBlue';
+            // curActiveRow.parentNode.scrollTop = curActiveRow.offsetTop;
+            curActiveRow.scrollIntoView();
         });
         this.yMap.geoObjects.add(curPM);
     });

@@ -8,8 +8,9 @@ html, body {
 }
 
 #map {
+    flex: 2 0 0;
     width: 640px;
-    height: 480px;
+    height: 90vh;
     margin: 20px;
 }
 
@@ -18,15 +19,17 @@ html, body {
 }
 
 .table {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     height: 100%;
     border: 1px solid black;
     margin: 15px;
     overflow-y: auto; 
+    max-height: 90vh;
 }
 
 .table-row {
     padding: 10px;
+    font-family: Arial, sans-serif;
 }
 
 .table-row + .table-row {
