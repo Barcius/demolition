@@ -392,7 +392,7 @@ function init() {
     data.forEach(async (bg, i) => {
         const qResult = await fetch('res/' + (i + 1));
         const text = await qResult.text();
-        const picEls = Array.from(parser.parseFromString(text, "text/html").querySelectorAll('.icon-jpg'));
+        const picEls = Array.from(parser.parseFromString(text, "text/html").querySelectorAll('.icon-jpg, .icon-jpeg, .icon-JPG'));
         let picsHtmlString = ''; 
         picEls.forEach((el, i) => {
             const ref = el.attributes.href.value;
