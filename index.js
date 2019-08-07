@@ -362,6 +362,8 @@ const data = [
   ]
 const tableRows = [];
 
+const parser = new DOMParser();
+
 
 ymaps.ready(init);
 function init() {
@@ -388,11 +390,23 @@ function init() {
     });
 
     data.forEach(async (bg, i) => {
+        const qResult = await fetch('res/' + (i + 1));
+        const text = await qResult.text();
+        const picEls = Array.from(parser.parseFromString(text, "text/html").querySelectorAll('.icon-jpg'));
+        let picsHtmlString = ''; 
+        picEls.forEach((el, i) => {
+            const ref = el.attributes.href.value;
+            picsHtmlString += `<a href="${ref}" data-lightbox="${ref}"><img src="${ref}" width="50px"/></a>`; 
+        }); 
+        
+
+
         const curGO = await ymaps.geocode(bg.address, { results: 1 });
         const curPM = new ymaps.Placemark(curGO.geoObjects.get(0).geometry, {
             hintContent: `${i + 1}. ${bg.name}`,
             balloonContent: `
-            <div>AO: ${bg.ao}<br/>Наименование ЛПУ: ${bg.name}<br/>${bg.address}<br/>Наименование строения: ${bg.building}<br/>Год постройки: ${bg.year}<br/>${bg.usage}<br/>Площадь здания: ${bg.space} кв.м.<br/>Этажность: ${bg.floors}</div>`
+            <div>AO: ${bg.ao}<br/>Наименование ЛПУ: ${bg.name}<br/>${bg.address}<br/>Наименование строения: ${bg.building}<br/>Год постройки: ${bg.year}<br/>${bg.usage}<br/>Площадь здания: ${bg.space} кв.м.<br/>Этажность: ${bg.floors}</div>
+            ${picsHtmlString}`
         });
         this.yMap.geoObjects.add(curPM);
     });
