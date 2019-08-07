@@ -360,7 +360,7 @@ const data = [
       "floors": "1 этаж"
     }
   ]
-
+const tableRows = [];
 
 
 ymaps.ready(init);
@@ -368,9 +368,10 @@ function init() {
     const table = document.querySelector('.table');
     data.forEach((bg, i) => {
         const row = document.createElement('div');
-        row.innerHTML = `${i + 1} ${bg.name}<br/>${bg.address}`;
+        row.innerHTML = `${i + 1}. ${bg.name}<br/>${bg.address}`;
         row.classList.add('table-row');
         table.appendChild(row);
+        tableRows.push(row);
     })
 
     const center = [55.75399400, 37.62209300];
@@ -386,8 +387,13 @@ function init() {
         controls: ['zoomControl']
     });
 
-    data.forEach(async bg => {
-        const curGO = await ymaps.geocode(bg.address, { results: 1 }); 
-        this.yMap.geoObjects.add(curGO.geoObjects.get(0));
+    data.forEach(async (bg, i) => {
+        const curGO = await ymaps.geocode(bg.address, { results: 1 });
+        const curPM = new ymaps.Placemark(curGO.geoObjects.get(0).geometry, {
+            hintContent: `${i + 1}. ${bg.name}`,
+            balloonContent: `
+            <div>AO: ${bg.ao}<br/>Наименование ЛПУ: ${bg.name}<br/>${bg.address}<br/>Наименование строения: ${bg.building}<br/>Год постройки: ${bg.year}<br/>${bg.usage}<br/>Площадь здания: ${bg.space} кв.м.<br/>Этажность: ${bg.floors}</div>`
+        });
+        this.yMap.geoObjects.add(curPM);
     });
 }
