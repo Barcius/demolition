@@ -361,6 +361,7 @@ const data = [
     }
   ]
 const tableRows = [];
+const PMs = [];
 let curActiveRow;
 
 const parser = new DOMParser();
@@ -377,7 +378,7 @@ function init() {
             if (curActiveRow) curActiveRow.style.background = 'none';
             curActiveRow = e.currentTarget;
             curActiveRow.style.background = 'LightSkyBlue';
-            const curGeo = this.yMap.geoObjects.get(i);
+            const curGeo = PMs[i];
             this.yMap.panTo(curGeo.geometry.getCoordinates());
             curGeo.balloon.open();
         };
@@ -424,6 +425,7 @@ function init() {
             // curActiveRow.parentNode.scrollTop = curActiveRow.offsetTop;
             curActiveRow.scrollIntoView();
         });
+        PMs[i] = curPM;
         this.yMap.geoObjects.add(curPM);
     });
 }
