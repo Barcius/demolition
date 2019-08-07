@@ -361,6 +361,7 @@ const data = [
     }
   ]
 const tableRows = [];
+let curActiveRow;
 
 const parser = new DOMParser();
 
@@ -372,6 +373,14 @@ function init() {
         const row = document.createElement('div');
         row.innerHTML = `${i + 1}. ${bg.name}<br/>${bg.address}`;
         row.classList.add('table-row');
+        row.onclick = (e) => {
+            if (curActiveRow) curActiveRow.style.background = 'none';
+            curActiveRow = e.currentTarget;
+            curActiveRow.style.background = 'grey';
+            const curGeo = this.yMap.geoObjects.get(i);
+            this.yMap.panTo(curGeo.geometry.getCoordinates());
+            curGeo.balloon.open();
+        };
         table.appendChild(row);
         tableRows.push(row);
     })
@@ -407,6 +416,11 @@ function init() {
             balloonContent: `
             <div>AO: ${bg.ao}<br/>Наименование ЛПУ: ${bg.name}<br/>${bg.address}<br/>Наименование строения: ${bg.building}<br/>Год постройки: ${bg.year}<br/>${bg.usage}<br/>Площадь здания: ${bg.space} кв.м.<br/>Этажность: ${bg.floors}</div>
             ${picsHtmlString}`
+        });
+        curPM.events.add('click', () => {
+            if (curActiveRow) curActiveRow.style.background = 'none';
+            curActiveRow = tableRows[i];
+            curActiveRow.style.background = 'grey';
         });
         this.yMap.geoObjects.add(curPM);
     });
